@@ -1,0 +1,43 @@
+# Use an official Python image
+FROM python:3.9-slim-buster
+
+# Install Firefox and geckodriver
+RUN apt-get update && \
+    apt-get install -y firefox-esr \
+                        wget \
+                       libglib2.0-0 \
+                       libdbus-glib-1-2 \
+                       libgtk-3-0 \
+                       libnss3 \
+                       libxss1 \
+                       libasound2 \
+                       libxtst6 \
+                       xvfb \
+                       fonts-liberation \
+                       && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy requirements file and script into the container
+COPY requirements.txt .
+COPY news_scraper.py nifty_comments_scraper.py .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# # Install GeckoDriver
+RUN wget --no-verbose -O /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v0.35.0/geckodriver-v0.35.0-linux-aarch64.tar.gz" && \
+    tar -xzf /tmp/geckodriver.tar.gz -C /usr/local/bin/ && \
+    rm /tmp/geckodriver.tar.gz && \
+    chmod +x /usr/local/bin/geckodriver
+
+# Create a directory for AWS credentials
+RUN mkdir -p /root/.aws
+
+# Copy AWS credentials file into the container
+COPY .env /root/.aws/credentials
+
+# Run both scripts sequentially
+CMD ["sh", "-c", "python news_scraper.py && python nifty_comments_scraper.py"]

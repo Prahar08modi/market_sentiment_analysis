@@ -1,0 +1,9 @@
+pandas
+boto3
+nltk
+sagemaker
+jupyter
+papermill
+python-dotenv
+spacy==3.5.3
+numpy<1.24.0

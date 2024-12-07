@@ -1,0 +1,45 @@
+# Use a base image with Python
+FROM python:3.8-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=TRUE
+ENV PATH="/opt/program:${PATH}"
+
+# Install required system packages
+RUN apt-get update && apt-get install -y \
+    curl \
+    gcc \
+    g++ \
+    make \
+    libpq-dev \
+    libffi-dev \
+    libblas-dev \
+    liblapack-dev \
+    libopenblas-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install spaCy language model if needed
+RUN python -m spacy download en_core_web_sm
+
+# Copy the .env file into the container
+COPY .env /opt/program/.env
+COPY stop_words.txt /opt/program/stop_words.txt
+
+# Copy the entrypoint script and notebook
+COPY entrypoint.sh /opt/program/entrypoint.sh
+COPY comments_sentiment_analyzer.ipynb /opt/program/comments_sentiment_analyzer.ipynb
+
+# Set the working directory
+WORKDIR /opt/program
+
+# Make the entrypoint script executable
+RUN chmod +x /opt/program/entrypoint.sh
+
+# Define the entrypoint script
+ENTRYPOINT ["sh", "/opt/program/entrypoint.sh"]

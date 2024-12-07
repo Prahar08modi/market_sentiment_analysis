@@ -1,0 +1,15 @@
+{
+  "fileLocations": [
+    {
+      "URIPrefixes": [
+        "s3://sentiment-analyzed-data/csv/sentiment_analysis_results_2"
+      ]
+    }
+  ],
+  "globalUploadSettings": {
+    "format": "CSV",
+    "delimiter": ",",
+    "textqualifier": "\"",
+    "containsHeader": "true"
+  }
+}

@@ -1,0 +1,33 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Specific .env files to ignore
+01_News_scraper/docker/moneycontrol_scraper/.env
+02_Analysis/docker/comments_docker/.env
+02_Analysis/docker/news_docker/.env
+
+# End of https://mrkandreev.name/snippets/gitignore-generator/#macOS
